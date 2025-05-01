@@ -27,7 +27,7 @@ GOLD = Firm(
     rf
 )
 
-# Interpolated long and short term debt, Market cap
+# Interpolated long and short-term debt, Market cap
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.plot(GOLD.data.K / 1e9,color = "black", linestyle = "-", label = "$L_t$")
 ax.set_ylabel(r"$L_t (10^9)$")
@@ -42,7 +42,7 @@ plt.savefig("plot/Kt.pdf")
 plt.show()
 
 # KMV
-sigma, v0 = fun.KMV(0, GOLD.data.Mrk_cap, GOLD.data.K, GOLD.data.rf)
+sigma, v0 = part1_fun.KMV(0, GOLD.data.Mrk_cap, GOLD.data.K, GOLD.data.rf)
 
 
 
@@ -50,8 +50,8 @@ sigma, v0 = fun.KMV(0, GOLD.data.Mrk_cap, GOLD.data.K, GOLD.data.rf)
 ## Interpolate frontier by linearly interpolate
 # Observed yield
 nss_coef = [.013997809781669e-05, .0417537838746407, -1.243277675590, 1.34379235533314, 12.3652373905849, 12.9049079240786]
-t_grid = np.linspace(1, 20, 200)
-y_obs = pd.DataFrame(part1_fun.nss_f(t_grid, *nss_coef), index=t_grid, columns=["zcy"])
+t_grid = np.linspace(1, 20, 500)
+y_obs = pd.DataFrame(part1_fun.nss(t_grid, *nss_coef), index=t_grid, columns=["zcy"])
 
 # Interpolate the debt structure
 debt_1 = GOLD.data.K.iloc[-1]

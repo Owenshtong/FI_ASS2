@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import minimize
+from scipy.optimize import minimize, shgo
 import part1_fun
 import part2_fun
 
@@ -61,6 +61,7 @@ opt_result = minimize(sse,
                       )
 opt_rf = opt_result["x"]
 # [0.00941375, 0.09876645, 0.00101344, 0.03980174]
+
 yld_clib_rf = part2_fun.yld(0, T_grid, *opt_rf)
 yld_clib_rf = part2_fun.yld(0, np.linspace(0.5,30,200), *opt_rf)
 
@@ -81,6 +82,7 @@ opt_result = minimize(sse,
                       options={'maxiter': 1000000}
                       )
 pack_BM = opt_result["x"]
+
 # [0.00941375, 0.09876645, 0.00101344, 0.03980174]
 yld_clib_AA = part2_fun.yld_AA(0, T_grid, *pack_BM, *opt_rf)
 yld_clib_AA = part2_fun.yld_AA(0,  np.linspace(0.5,30,200), *pack_BM, *opt_rf)

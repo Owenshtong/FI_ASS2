@@ -4,6 +4,7 @@ from scipy.stats import norm
 from scipy.optimize import fsolve
 from scipy.optimize import minimize
 
+
 # CIR ZCB price
 def a_cir(t, T, kappa, theta, sigma):
     gamma = np.sqrt(kappa**2 + 2 * sigma**2)
@@ -31,19 +32,8 @@ def yld_AA(t, T, kappa_s, theta_s, sigma_s, s0, alpha, beta, kappa_r, theta_r, s
     P_s = P_cir(t, T, kappa_s, theta_s, sigma_s, s0)
     return -1/(T-t) * (np.log(P_y) + np.log(P_s) - alpha * T)
 
-# Explicit finite difference
-def _rs_plane_(nr, ns, r_max, s_max, r_min = 0, s_min = 0):
-    """
-    :param nr: number of steps on r dimension (horizontal)
-    :param ns: number of steps on s dimension (vertical)
-    :param ind: The time index of the sheet (numeric)
-    :return: nr by ns 2d np array
-    """
-    nr = np.linspace(r_min, r_max, nr)
-    ns = np.linspace(s_max, s_min, ns)
-    sheet = np.meshgrid(nr, ns)
-    return sheet
 
+# Explicit finite difference
 def mu_x(kappa, theta, xt):
     return kappa * (theta - xt)
 
@@ -51,18 +41,46 @@ def vol_x(sigma, xt):
     return sigma * np.sqrt(xt)
 
 # Coeff
+# def B(dt, dr, vol_r, mu_r):
+#     return (dt * vol_r) / (2 * dr**2) - dt * mu_r/(2 * dr)
+#
+# def D(dt, ds, vol_s, mu_s):
+#     return (dt * vol_s) / (2 * ds**2) - dt * mu_s/(2 * ds)
+#
+# def E(dt, dr, ds, ind_r, ind_s, vol_r, vol_s):
+#     r_ij = ind_r * dr + ind_s * ds
+#     return 1 - (dt * vol_r) / dr**2 - (dt * vol_s) / ds**2 - r_ij * dt
+#
+# # def E(dt,dr,ds, r, s , vol_r, vol_s, alpha, beta):
+# #     r_ij = alpha + (1+beta) * r + s
+# #     return 1 - (dt * vol_r) / dr**2 - (dt * vol_s) / ds**2 - r_ij * dt
+#
+# def H(dt, dr,vol_r, mu_r):
+#     return (dt * vol_r) / (2 * dr**2) + dt * mu_r/(2 * dr)
+#
+# def F(dt, ds, vol_s, mu_s):
+#     return (dt * vol_s) / (2 * ds**2) + dt * mu_s/(2 * ds)
+#
+
+
 def B(dt, dr, vol_r, mu_r):
-    return (dt * vol_r) / (2 * dr**2) - dt * mu_r/(2 * dr)
+    return (dt * vol_r**2) / (2 * dr**2) - dt * mu_r/(2 * dr)
 
 def D(dt, ds, vol_s, mu_s):
-    return (dt * vol_s) / (2 * ds**2) - dt * mu_s/(2 * ds)
+    return (dt * vol_s**2) / (2 * ds**2) - dt * mu_s/(2 * ds)
+#
+# def E(dt, dr, ds, ind_r, ind_s, vol_r, vol_s):
+#     r_ij = ind_r * dr + ind_s * ds
+#     return 1 - (dt * vol_r**2) / dr**2 - (dt * vol_s**2) / ds**2 - r_ij * dt
 
-def E(dt, dr, ds, ind_r, ind_s, vol_r, vol_s):
-    r_ij = ind_r * dr + ind_s * ds
-    return 1 - (dt * vol_r) / dr**2 - (dt * vol_s) / ds**2 - r_ij * dt
+def E(dt,dr,ds, r, s , vol_r, vol_s, alpha, beta):
+    r_ij = alpha + (1+beta) * r + s
+    return 1 - (dt * vol_r**2) / dr**2 - (dt * vol_s**2) / ds**2 - r_ij * dt
 
 def H(dt, dr,vol_r, mu_r):
-    return (dt * vol_r) / (2 * dr**2) + dt * mu_r/(2 * dr)
+    return (dt * vol_r**2) / (2 * dr**2) + dt * mu_r/(2 * dr)
 
 def F(dt, ds, vol_s, mu_s):
-    return (dt * vol_s) / (2 * ds**2) + dt * mu_s/(2 * ds)
+    return (dt * vol_s**2) / (2 * ds**2) + dt * mu_s/(2 * ds)
+
+
