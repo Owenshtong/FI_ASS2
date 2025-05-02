@@ -67,15 +67,9 @@ for i in list(range(N_t-1, -1, -1)):
 
                                 B = part2_fun.B(dt, dr, vol_r, mu_r)
                                 D = part2_fun.D(dt, ds, vol_s, mu_s)
-                                # E = part2_fun.E(dt, dr, ds, x, y, vol_r, vol_s)
                                 E = part2_fun.E(dt, dr, ds, rt, st, vol_r, vol_s, alpha, beta)
                                 H = part2_fun.H(dt, dr, vol_r, mu_r)
                                 F = part2_fun.F(dt, ds, vol_s, mu_s)
-                                # print("B " + str(B))
-                                # print("D " + str(D))
-                                # print("E " + str(E))
-                                # print("H " + str(H))
-                                # print("F " + str(F))
 
 
                                 # continuous value
@@ -101,7 +95,7 @@ for i in list(range(N_t-1, -1, -1)):
                 if t <= bound:
                         bound = bound - 0.5
                 l.append(sheet_t)
-                print(sheet_t)
+
 
 t0 = l[-1]
 
@@ -123,16 +117,16 @@ D_callable = griddata((r_cord.ravel(), s_cord.ravel()), t0.ravel(), (r0,s0), met
 
 # Cord plot
 fig = plt.figure()
-fig.set_size_inches(8,5)
-plt.contourf(r_cord, s_cord, t0, cmap='binary')
-plt.scatter(r0, s0, c=D_callable, cmap='binary', edgecolor='k',label = "current point")
-plt.colorbar()
+fig.set_size_inches(10,6)
+cf = plt.contourf(r_cord, s_cord, t0, levels=300, cmap='binary')
+plt.colorbar(cf, label='Debt Value', format='%.1e')
+plt.scatter(r0, s0, color="red",label = "current point")
 plt.title("Contour plot of debt value at time 0")
 plt.xlabel(r"$r_0$")
 plt.ylabel(r"$s_0$")
 plt.legend()
 plt.gcf()
-plt.savefig("court.pdf")
+plt.savefig("plot/court.pdf")
 plt.show()
 
 # Compute the yield
@@ -144,7 +138,6 @@ def D_dcf(y, D):
                acc += c_dollar * np.exp(- t * y)
         acc += M * np.exp(-5 * y)
         return D - acc
-
 
 y_callable = fsolve(D_dcf, 0.01, args=(D_callable))
 y_non_callable = fsolve(D_dcf, 0.01, args=(D_non_callable))

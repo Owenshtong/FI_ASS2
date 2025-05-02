@@ -93,10 +93,10 @@ ax1 = ax.twinx()
 ax.plot(np.linspace(0.5,30,200),yld_clib_AA * 100, color = "black", linestyle = "--", label="AA Yield")
 ax.scatter(data.index,data.AA_yield * 100, color = "red", marker = "D", s = 12, label="Observed AA Yield")
 
-ax.plot(np.linspace(0.5,30,200), yld_clib_rf * 100, color = "grey", linestyle = "-.", label="NSS ZCB Yield")
-ax.scatter(data.index,rf * 100, color = "darkorange", marker = "D", s = 12, label="Observed ZCB Yield")
+ax.plot(np.linspace(0.5,30,200), yld_clib_rf * 100, color = "black", linestyle = "-.", label="NSS ZCB Yield")
+ax.scatter(data.index,rf * 100, color = "#BB4E4E", marker = "*", s = 12, label="Observed ZCB Yield")
 
-ax1.plot(np.linspace(0.5,30,200), (yld_clib_AA - yld_clib_rf) * 10000, label = "TSCS")
+ax1.plot(np.linspace(0.5,30,200), (yld_clib_AA - yld_clib_rf) * 10000, color = "grey", label = "TSCS")
 ax1.set_ylabel("TSCS (bps)")
 ax1.legend(loc=[0.013,0.75],facecolor='none', edgecolor='none')
 
